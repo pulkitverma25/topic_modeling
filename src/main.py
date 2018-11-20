@@ -31,7 +31,7 @@ sift_words=np.arange(1000)
 cl.corr_lda(num_topics, sift_words, text_words, sift_train, annot_train,  alpha, phi, gamma, lambdaa)
 
 '''
-To test sample data
+#To test sample data
 
 #words = read_dictionary("../data/corel5k_dictionary.txt")
 # Words
