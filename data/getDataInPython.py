@@ -1,9 +1,22 @@
 import matlab.engine
 import array
 import numpy as np
+import os
+
+
+def read_dictionary(file):
+    data = []
+    f = open(file, "r")
+    for x in f:
+        x = x.strip()
+        data.append(x)
+
+    return data
 
 def getCorel5kData():
 	eng = matlab.engine.start_matlab()
+	path = os.path.dirname(os.path.abspath(__file__))
+	eng.addpath(path,nargout=0)
 	annot_test, annot_train, caption_test, caption_train, sift_test, sift_train = eng.loadcorel5k ("corel5k", nargout=6)
 
 	annot_test = np.asarray(matlab.int32(annot_test))
@@ -12,12 +25,5 @@ def getCorel5kData():
 	caption_train = np.array(caption_train)
 	sift_test = np.asarray(matlab.int32(sift_test))
 	sift_train = np.asarray(matlab.int32(sift_train))
-	return annot_test, annot_train, caption_test, caption_train, sift_test, sift_train
 
-annot_test, annot_train, caption_test, caption_train, sift_test, sift_train = getCorel5kData()
-print (annot_test.shape)
-print (annot_train.shape)
-print (caption_test.shape)
-print (caption_train.shape)
-print (sift_test.shape)
-print (sift_train.shape)
+	return annot_test, annot_train, caption_test, caption_train, sift_test, sift_train
