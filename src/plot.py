@@ -1,0 +1,12 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+y = [3.3343884596362234, 3.3317080626562317, 3.327962811203901, 3.3257246881814884, 3.3244050617817633, 3.324117108171784, 3.323699689755551, 3.3236788455312345, 3.3238151328840666, 3.324080984842813]
+x=[2,5,10,20,50,100,150,200,250,280]
+
+plt.figure()
+plt.xticks(np.arange(len(x)),x)
+plt.plot(np.squeeze(y),'--bo',label = "Perplexity", )
+plt.legend()
+plt.show() 
