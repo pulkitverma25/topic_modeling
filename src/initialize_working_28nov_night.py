@@ -7,6 +7,8 @@ sift_test = np.asarray(np.loadtxt('../data/sift_test.csv', delimiter=',', dtype=
 annot_test = np.asarray(np.loadtxt('../data/annot_test.csv', delimiter=',', dtype=int))
 #initialize_coun
 #t_matrices(5, 4500, 1000, 260, sift_train, annot_train)
+
+
 visual_words=sift_train
 text_word = annot_train
 num_tw=260
@@ -209,7 +211,7 @@ def perplexity():
             
 '''
 
-def perplexity(siftXword, sift, annot):
+def perplexity(siftXword, sift, annot, siftCount):
     sigma2=0
     for i in range(len(sift)):
         #260 x 1 matrix
@@ -222,7 +224,7 @@ def perplexity(siftXword, sift, annot):
         sigma2 += sigma1
 
     #sum(sift feature matrix)
-    denom = np.sum(sift)
+    denom = np.sum(siftCount)
     braces = np.divide(sigma2, denom)
     #braces = sigma2
     final = np.exp(-braces)
@@ -235,10 +237,14 @@ def perplexity(siftXword, sift, annot):
 visual_words = [[] for i in range(num_vw)]
 text_word = [[] for i in range(num_tw)]
 
+
+siftCountTrain = np.zeros(num_docs, dtype = int)
+
 for i in range(num_docs):
     for j in range(num_vw):
         if sift_train[i][j] != 0:
             visual_words[j].append(i)
+            siftCountTrain[i] += 1
 
     for j in range(num_tw):
         if annot_train[i][j] !=0:
@@ -253,29 +259,33 @@ visual_words_list = np.arange(1000)
 iters = 10000
 #1000 x 260 matrix
 siftXword = initialize_count_matrices(num_topics, num_docs, num_vw, num_tw, visual_words, text_word, visual_words_list, 1, 1, iters)
-p_train = perplexity(siftXword, sift_train, annot_train)
+p_train = perplexity(siftXword, sift_train, annot_train, siftCountTrain)
 
 
+num_docs = 499
 visual_words_test = [[] for i in range(num_vw)]
 text_word_test = [[] for i in range(num_tw)]
+siftCountTest = np.zeros(num_docs, dtype = int)
 
 for i in range(num_docs):
     for j in range(num_vw):
-        if sift_train[i][j] != 0:
+        if sift_test[i][j] != 0:
             visual_words_test[j].append(i)
+            siftCountTest[i] += 1
 
     for j in range(num_tw):
-        if annot_train[i][j] !=0:
+        if annot_test[i][j] !=0:
             text_word_test[j].append(i)
-num_docs = 499
-iters=10
+            
+#print "Train complete"
+
+iters=20
 siftXwordT = initialize_count_matrices(num_topics, num_docs, num_vw, num_tw, visual_words_test, text_word_test, visual_words_list, 1, 1, iters)
-p_test = perplexity(siftXwordT, sift_train, annot_train)
+p_test = perplexity(siftXwordT, sift_test, annot_test, siftCountTest)
 
 
 print (p_train)
 print(p_test)
-
 
 
 
